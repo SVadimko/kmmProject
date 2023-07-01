@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun LoadingRecipeListShimmer(
     imageHeight: Dp,
-    padding: Dp = 16.dp
+    padding: Dp = 6.dp
 ){
     BoxWithConstraints(
         modifier = Modifier.fillMaxSize()

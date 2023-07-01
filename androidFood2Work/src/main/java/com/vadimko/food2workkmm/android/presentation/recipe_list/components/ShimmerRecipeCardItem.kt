@@ -6,6 +6,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.graphics.Color
@@ -34,6 +35,7 @@ fun ShimmerRecipeCardItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(cardHeight)
+                    .clip(MaterialTheme.shapes.large)
                     .background(brush = brush)
             )
         }
