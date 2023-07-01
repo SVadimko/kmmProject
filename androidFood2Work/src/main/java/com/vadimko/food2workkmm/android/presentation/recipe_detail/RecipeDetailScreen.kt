@@ -1,27 +1,39 @@
 package com.vadimko.food2workkmm.android.presentation.recipe_detail
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.vadimko.food2workkmm.android.presentation.components.RecipeImage
-import com.vadimko.food2workkmm.android.presentation.recipe_list.components.RecipeCard
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.vadimko.food2workkmm.android.presentation.components.RECIPE_IMAGE_HEIGHT
+import com.vadimko.food2workkmm.android.presentation.recipe_detail.components.LoadingRecipeShimmer
+import com.vadimko.food2workkmm.android.presentation.recipe_detail.components.RecipeView
 import com.vadimko.food2workkmm.android.presentation.theme.AppTheme
-import com.vadimko.food2workkmm.domain.model.Recipe
+import com.vadimko.food2workkmm.presentation.recipe_detail.RecipeDetailEvents
+import com.vadimko.food2workkmm.presentation.recipe_detail.RecipeDetailState
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun RecipeDetailScreen(
-    recipe: Recipe?,
-){
-    AppTheme(displayProgressBar = false) {
-        if(recipe == null){
-            Text("ERROR")
+    state: RecipeDetailState,
+    onTriggerEvent: (RecipeDetailEvents) -> Unit
+) {
+    AppTheme(displayProgressBar = state.isLoading) {
+        if (state.recipe == null && state.isLoading) {
+           LoadingRecipeShimmer(imageHeight = RECIPE_IMAGE_HEIGHT.dp)
+        } else if (state.recipe == null) {
+            Text(
+                text = "We were unable to retrieve the details for this recipe.\n Try resetting the app",
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.body1
+            )
+
         } else {
-//           RecipeImage(url = recipe.featuredImage, contentDescription = "Image")
-            RecipeCard(recipe = recipe, ) {
-                
+            state.recipe?.let {
+                RecipeView(it)
             }
         }
     }

@@ -36,7 +36,10 @@ fun Navigation() {
             )
         ) {
             val viewModel: RecipeDetailViewModel = hiltViewModel()
-            RecipeDetailScreen(recipe = viewModel.recipe.value)
+            RecipeDetailScreen(
+                state = viewModel.state.value,
+                onTriggerEvent = viewModel::onTriggerEvent
+             )
         }
     }
 }

@@ -53,6 +53,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.7.0")*/
     implementation(Accompanist.coil)
     implementation(AndroidX.appCompat)
+    //implementation(Coil.coilCompose)
 
     implementation(Compose.runtime)
     implementation(Compose.runtimeLiveData)
