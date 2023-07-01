@@ -1,3 +1,5 @@
 <resources>
-    <style name="AppTheme" parent="android:Theme.Material.NoActionBar"/>
+    <style name="AppTheme" parent = "Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">#FF1565C0</item> <!--Blue800-->
+    </style>
 </resources>

@@ -33,31 +33,32 @@ kotlin {
             baseName = "shared"
         }
     }
-    
+
     sourceSets {
-     /*   val commonMain by getting {
-            dependencies{
+        /*   val commonMain by getting {
+               dependencies{
+                   implementation(Kotlinx.datetime)
+                   implementation(Ktor.core)
+                   implementation(Ktor.clientSerialization)
+               }
+           }
+           val androidMain by getting {
+               dependencies{
+                   implementation(Ktor.android)
+               }
+           }
+           val iosMain by getting{
+               dependencies {
+                   implementation(Ktor.ios)
+               }
+           }*/
+        val commonMain by getting {
+            dependencies {
                 implementation(Kotlinx.datetime)
                 implementation(Ktor.core)
                 implementation(Ktor.clientSerialization)
-            }
-        }
-        val androidMain by getting {
-            dependencies{
-                implementation(Ktor.android)
-            }
-        }
-        val iosMain by getting{
-            dependencies {
-                implementation(Ktor.ios)
-            }
-        }*/
-        val commonMain by getting {
-            dependencies{
-                implementation(Kotlinx.datetime)
-                implementation(Ktor.core)
-                    implementation(Ktor.clientSerialization)
-                    implementation(SQLDelight.runtime)
+                implementation(Ktor.logging)
+                implementation(SQLDelight.runtime)
                 //implementation(Ktor.negotiation)
                 //implementation(Ktor.json)
             }
@@ -69,14 +70,14 @@ kotlin {
         }
         val androidMain by getting {
             //dependsOn(commonMain)
-            dependencies{
+            dependencies {
                 implementation(Ktor.android)
                 implementation(SQLDelight.androidDriver)
 
             }
         }
         val androidUnitTest by getting
-        val iosX64Main by getting{
+        val iosX64Main by getting {
             dependencies {
             }
         }
@@ -90,7 +91,7 @@ kotlin {
                 //implementation(Ktor.core)
                 //implementation(Ktor.clientSerialization)
                 //implementation(Ktor.negotiation)
-               // implementation(Ktor.json)
+                // implementation(Ktor.json)
                 implementation(Ktor.ios)
                 implementation(SQLDelight.nativeDriver)
             }

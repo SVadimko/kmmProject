@@ -4,6 +4,7 @@ import com.vadimko.food2workkmm.datasource.cache.RecipeCache
 import com.vadimko.food2workkmm.datasource.network.RecipeService
 import com.vadimko.food2workkmm.domain.model.Recipe
 import com.vadimko.food2workkmm.domain.util.DataState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -19,6 +20,7 @@ class SearchRecipes(
         emit(DataState.loading())
         try{
             val recipes = recipeService.search(page, query)
+            delay(500)
             recipeCache.insert(recipes)
             val cacheResults = if(query.isBlank()){
                 recipeCache.getAll(page = page)
