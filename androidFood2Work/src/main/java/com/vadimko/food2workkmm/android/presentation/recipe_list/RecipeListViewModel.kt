@@ -92,5 +92,9 @@ class RecipeListViewModel @Inject constructor(
         state.value = state.value.copy(recipes = curr)
     }
 
-    private fun handleError(error:String){}
+    private fun handleError(error:String){
+        val queue = state.value.queue
+        queue.add(error)
+        state.value = state.value.copy(queue = queue)
+    }
 }
