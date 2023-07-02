@@ -23,6 +23,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.vadimko.food2workkmm.SharedRes
+import com.vadimko.food2workkmm.android.presentation.support.stringResource
 import com.vadimko.food2workkmm.presentation.recipe_list.FoodCategory
 import com.vadimko.food2workkmm.presentation.recipe_list.FoodCategoryUtil
 
@@ -50,7 +52,7 @@ fun SearchAppbar(
                     value = query,
                     onValueChange = onQueryChange,
                     label = {
-                        Text(text = "Search")
+                        Text(text = stringResource(id = SharedRes.strings.search))
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,

@@ -1,11 +1,15 @@
 package com.vadimko.food2workkmm.android.presentation.recipe_list
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vadimko.food2workkmm.SharedRes
+import com.vadimko.food2workkmm.android.presentation.support.stringResource
+import com.vadimko.food2workkmm.android.presentation.support.stringResourceCommon
 import com.vadimko.food2workkmm.domain.model.Recipe
 import com.vadimko.food2workkmm.interactors.recipe_list.SearchRecipes
 import com.vadimko.food2workkmm.presentation.recipe_list.FoodCategory
@@ -19,6 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecipeListViewModel @Inject constructor(
+    @ApplicationContext private val ctx: Context,
     private val savedStateHandle: SavedStateHandle,
     private val searchRecipes: SearchRecipes
 ): ViewModel() {
@@ -49,7 +54,7 @@ class RecipeListViewModel @Inject constructor(
                 state.value = state.value.copy(selectedCategory = event.category, query = event.category.value)
             }
             else -> {
-                handleError("ERROR")
+                handleError(stringResourceCommon(id = SharedRes.strings.hello_world, context = ctx))
             }
         }
     }

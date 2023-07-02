@@ -1,12 +1,10 @@
 plugins {
-//    kotlin("multiplatform")
-//    kotlin("native.cocoapods")
-//    id("com.android.library")
     kotlin(KotlinPlugins.multiplatform)
     kotlin(KotlinPlugins.cocoapods)
     kotlin(KotlinPlugins.serialization) version Kotlin.version
     id(Plugins.androidLibrary)
     id(Plugins.sqlDelight)
+    id(Plugins.moko)
 }
 
 version = "1.5.5"
@@ -34,24 +32,19 @@ kotlin {
         }
     }
 
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+           // baseName = "shared"
+            export(Moko.mokoResDep)
+            export(Moko.mokoGraphDep)
+        }
+    }
+
     sourceSets {
-        /*   val commonMain by getting {
-               dependencies{
-                   implementation(Kotlinx.datetime)
-                   implementation(Ktor.core)
-                   implementation(Ktor.clientSerialization)
-               }
-           }
-           val androidMain by getting {
-               dependencies{
-                   implementation(Ktor.android)
-               }
-           }
-           val iosMain by getting{
-               dependencies {
-                   implementation(Ktor.ios)
-               }
-           }*/
         val commonMain by getting {
             dependencies {
                 implementation(Kotlinx.datetime)
@@ -59,8 +52,7 @@ kotlin {
                 implementation(Ktor.clientSerialization)
                 implementation(Ktor.logging)
                 implementation(SQLDelight.runtime)
-                //implementation(Ktor.negotiation)
-                //implementation(Ktor.json)
+                api(Moko.mokoResDep)
             }
         }
         val commonTest by getting {
@@ -69,7 +61,6 @@ kotlin {
             }
         }
         val androidMain by getting {
-            //dependsOn(commonMain)
             dependencies {
                 implementation(Ktor.android)
                 implementation(SQLDelight.androidDriver)
@@ -84,14 +75,11 @@ kotlin {
         val iosArm64Main by getting {
             dependencies {
             }
+
         }
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependencies {
-                //implementation(Ktor.core)
-                //implementation(Ktor.clientSerialization)
-                //implementation(Ktor.negotiation)
-                // implementation(Ktor.json)
                 implementation(Ktor.ios)
                 implementation(SQLDelight.nativeDriver)
             }
@@ -115,7 +103,7 @@ kotlin {
 
 sqldelight {
     database("RecipeDatabase") {
-        packageName = "com.vadimko.food2forkkmm.datasource.cache"
+        packageName = "com.vadimko.food2workkmm.datasource.cache"
         sourceFolders = listOf("sqldelight")
     }
 }
@@ -135,5 +123,10 @@ android {
         create("testDebugApi")
         create("testReleaseApi")
     }
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.vadimko.food2workkmm"
+    multiplatformResourcesClassName = "SharedRes"
 }
 

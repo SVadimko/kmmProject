@@ -1,8 +1,6 @@
 package com.vadimko.food2workkmm.datasource.cache
 
 import com.squareup.sqldelight.db.SqlDriver
-import com.vadimko.food2forkkmm.datasource.cache.RecipeDatabase
-import com.vadimko.food2forkkmm.datasource.cache.Recipe_Entity
 import com.vadimko.food2workkmm.domain.model.Recipe
 import com.vadimko.food2workkmm.domain.util.DatetimeUtil
 

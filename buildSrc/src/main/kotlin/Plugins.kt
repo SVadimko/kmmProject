@@ -3,4 +3,5 @@ object Plugins {
     const val androidLibrary = "com.android.library"
     const val hilt = "dagger.hilt.android.plugin"
     const val sqlDelight = "com.squareup.sqldelight"
+    const val moko = "dev.icerock.mobile.multiplatform-resources"
 }

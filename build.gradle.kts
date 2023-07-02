@@ -8,6 +8,12 @@ plugins {
     id("com.squareup.sqldelight").version("1.5.5").apply(false)
 }
 
+buildscript {
+    dependencies {
+        classpath(Moko.mokoResGenerator)
+    }
+}
+
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
