@@ -1,5 +1,6 @@
 package com.vadimko.food2workkmm.android.presentation.theme
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,8 +11,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.vadimko.food2workkmm.android.presentation.components.CircularIndeterminateProgressBar
-import java.util.*
+import com.vadimko.food2workkmm.android.presentation.components.ProcessDialogQueue
+import com.vadimko.food2workkmm.domain.model.GenericMessageInfo
+import com.vadimko.food2workkmm.domain.util.Queue
 
+@SuppressLint("ConflictingOnColor")
 private val LightThemeColors = lightColors(
     primary = Blue600,
     primaryVariant = Blue400,
@@ -32,7 +36,7 @@ private val LightThemeColors = lightColors(
 @Composable
 fun AppTheme(
     displayProgressBar: Boolean,
-//    dialogQueue: Queue<GenericMessageInfo> = Queue(mutableListOf()),
+    dialogQueue: Queue<GenericMessageInfo> = Queue(mutableListOf<GenericMessageInfo>()),
 //    onRemoveHeadMessageFromQueue: () -> Unit,
     content: @Composable () -> Unit,
 ) {
@@ -48,10 +52,10 @@ fun AppTheme(
         ){
             // For android we can process the DialogQueue at the Application level
             // on iOS you cannot do this because SwiftUI preloads the views in a List
-           /* ProcessDialogQueue(
+            ProcessDialogQueue(
                 dialogQueue = dialogQueue,
-                onRemoveHeadMessageFromQueue = onRemoveHeadMessageFromQueue,
-            )*/
+               // onRemoveHeadMessageFromQueue = onRemoveHeadMessageFromQueue,
+            )
             Column{
                 content()
             }

@@ -10,7 +10,9 @@ import androidx.lifecycle.viewModelScope
 import com.vadimko.food2workkmm.SharedRes
 import com.vadimko.food2workkmm.android.presentation.support.stringResource
 import com.vadimko.food2workkmm.android.presentation.support.stringResourceCommon
+import com.vadimko.food2workkmm.domain.model.GenericMessageInfo
 import com.vadimko.food2workkmm.domain.model.Recipe
+import com.vadimko.food2workkmm.domain.model.UIComponentType
 import com.vadimko.food2workkmm.interactors.recipe_list.SearchRecipes
 import com.vadimko.food2workkmm.presentation.recipe_list.FoodCategory
 import com.vadimko.food2workkmm.presentation.recipe_list.RecipeListEvents
@@ -19,7 +21,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 @HiltViewModel
 class RecipeListViewModel @Inject constructor(
@@ -54,7 +58,12 @@ class RecipeListViewModel @Inject constructor(
                 state.value = state.value.copy(selectedCategory = event.category, query = event.category.value)
             }
             else -> {
-                handleError(stringResourceCommon(id = SharedRes.strings.hello_world, context = ctx))
+//                appendToMessageQueue(stringResourceCommon(id = SharedRes.strings.hello_world, context = ctx))
+                appendToMessageQueue(GenericMessageInfo.Builder()
+                    .id(UUID.randomUUID().toString())
+                    .title("Error")
+                    .uiComponentType(UIComponentType.Dialog)
+                    .description("Invalid Event"))
             }
         }
     }
@@ -75,7 +84,7 @@ class RecipeListViewModel @Inject constructor(
                 appendRecipes(recipes)
             }
             dataState.message?.let{message->
-                handleError(message)
+                appendToMessageQueue(message)
          //       Log.wtf("recipeListVM", "${message}")
             }
         }.launchIn(viewModelScope)
@@ -97,9 +106,9 @@ class RecipeListViewModel @Inject constructor(
         state.value = state.value.copy(recipes = curr)
     }
 
-    private fun handleError(error:String){
+    private fun appendToMessageQueue(messageInfo:GenericMessageInfo.Builder){
         val queue = state.value.queue
-        queue.add(error)
+        queue.add(messageInfo.build())
         state.value = state.value.copy(queue = queue)
     }
 }
