@@ -2,6 +2,7 @@ package com.vadimko.food2workkmm.android.presentation.recipe_list
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -10,9 +11,9 @@ import androidx.lifecycle.viewModelScope
 import com.vadimko.food2workkmm.SharedRes
 import com.vadimko.food2workkmm.android.presentation.support.stringResource
 import com.vadimko.food2workkmm.android.presentation.support.stringResourceCommon
-import com.vadimko.food2workkmm.domain.model.GenericMessageInfo
-import com.vadimko.food2workkmm.domain.model.Recipe
-import com.vadimko.food2workkmm.domain.model.UIComponentType
+import com.vadimko.food2workkmm.domain.model.*
+import com.vadimko.food2workkmm.domain.util.GenericMessageInfoQueueUtil
+import com.vadimko.food2workkmm.domain.util.Queue
 import com.vadimko.food2workkmm.interactors.recipe_list.SearchRecipes
 import com.vadimko.food2workkmm.presentation.recipe_list.FoodCategory
 import com.vadimko.food2workkmm.presentation.recipe_list.RecipeListEvents
@@ -37,6 +38,30 @@ class RecipeListViewModel @Inject constructor(
     init {
         //loadRecipes()
         onTriggerEvent(RecipeListEvents.LoadRecipes)
+        val messageInfoBuilder = GenericMessageInfo.Builder()
+            .id(UUID.randomUUID().toString())
+            .title("FKITA")
+            .uiComponentType(UIComponentType.Dialog)
+            .description("That's something weird happens")
+            .positive(
+                PositiveAction(
+                    positiveBtnTxt = "YEP",
+                    onPositiveAction = {
+                        state.value = state.value.copy(query = "Whoa")
+                        onTriggerEvent(RecipeListEvents.NewSearch)
+                    }
+                )
+            )
+            .negative(
+                NegativeAction(
+                    negativeBtnTxt = "NO",
+                    onNegativeAction = {
+                        state.value = state.value.copy(query = "NO")
+                        onTriggerEvent(RecipeListEvents.NewSearch)
+                    }
+                )
+            )
+        appendToMessageQueue(messageInfoBuilder)
     }
 
     fun onTriggerEvent(event: RecipeListEvents){
@@ -56,6 +81,9 @@ class RecipeListViewModel @Inject constructor(
             is RecipeListEvents.OnSelectCategory -> {
                 onSelectedCategory(event.category)
                 state.value = state.value.copy(selectedCategory = event.category, query = event.category.value)
+            }
+            is RecipeListEvents.OnRemoveHeadMessageFromQueue -> {
+                removeHeadMessage()
             }
             else -> {
 //                appendToMessageQueue(stringResourceCommon(id = SharedRes.strings.hello_world, context = ctx))
@@ -107,8 +135,24 @@ class RecipeListViewModel @Inject constructor(
     }
 
     private fun appendToMessageQueue(messageInfo:GenericMessageInfo.Builder){
-        val queue = state.value.queue
-        queue.add(messageInfo.build())
-        state.value = state.value.copy(queue = queue)
+        if(!GenericMessageInfoQueueUtil().doesMessageAlreadyExistInQueue(
+                queue = state.value.queue,
+                messageInfo = messageInfo.build()
+        )) {
+            val queue = state.value.queue
+            queue.add(messageInfo.build())
+            state.value = state.value.copy(queue = queue)
+        }
+    }
+
+    private fun removeHeadMessage(){
+        try {
+           val queue = state.value.queue
+           queue.remove()
+            state.value = state.value.copy(queue = Queue(mutableListOf()))
+            state.value = state.value.copy(queue = queue)
+        } catch (e: Exception){
+
+        }
     }
 }

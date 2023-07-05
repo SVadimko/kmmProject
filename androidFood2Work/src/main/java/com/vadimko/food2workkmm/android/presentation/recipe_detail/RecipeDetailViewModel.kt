@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vadimko.food2workkmm.domain.model.GenericMessageInfo
 import com.vadimko.food2workkmm.domain.model.UIComponentType
+import com.vadimko.food2workkmm.domain.util.GenericMessageInfoQueueUtil
+import com.vadimko.food2workkmm.domain.util.Queue
 import com.vadimko.food2workkmm.interactors.recipe_detail.GetRecipe
 import com.vadimko.food2workkmm.presentation.recipe_detail.RecipeDetailEvents
 import com.vadimko.food2workkmm.presentation.recipe_detail.RecipeDetailState
@@ -31,6 +33,9 @@ class RecipeDetailViewModel @Inject constructor(
         when (event) {
             is RecipeDetailEvents.GetRecipe -> {
                 getRecipe(event.recipeId)
+            }
+            is RecipeDetailEvents.OnRemoveHeadMessageFromQueue -> {
+                removeHeadMessage()
             }
             else -> {
                 appendToMessageQueue(GenericMessageInfo.Builder()
@@ -65,9 +70,25 @@ class RecipeDetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun appendToMessageQueue(messageInfo: GenericMessageInfo.Builder){
-        val queue = state.value.queue
-        queue.add(messageInfo.build())
-        state.value = state.value.copy(queue = queue)
+    private fun appendToMessageQueue(messageInfo:GenericMessageInfo.Builder){
+        if(!GenericMessageInfoQueueUtil().doesMessageAlreadyExistInQueue(
+                queue = state.value.queue,
+                messageInfo = messageInfo.build()
+            )) {
+            val queue = state.value.queue
+            queue.add(messageInfo.build())
+            state.value = state.value.copy(queue = queue)
+        }
+    }
+
+    private fun removeHeadMessage(){
+        try {
+            val queue = state.value.queue
+            queue.remove()
+            state.value = state.value.copy(queue = Queue(mutableListOf()))
+            state.value = state.value.copy(queue = queue)
+        } catch (e: Exception){
+
+        }
     }
 }

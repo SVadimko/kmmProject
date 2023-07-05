@@ -37,7 +37,7 @@ private val LightThemeColors = lightColors(
 fun AppTheme(
     displayProgressBar: Boolean,
     dialogQueue: Queue<GenericMessageInfo> = Queue(mutableListOf<GenericMessageInfo>()),
-//    onRemoveHeadMessageFromQueue: () -> Unit,
+    onRemoveHeadMessageFromQueue: () -> Unit,
     content: @Composable () -> Unit,
 ) {
     MaterialTheme(
@@ -54,7 +54,7 @@ fun AppTheme(
             // on iOS you cannot do this because SwiftUI preloads the views in a List
             ProcessDialogQueue(
                 dialogQueue = dialogQueue,
-               // onRemoveHeadMessageFromQueue = onRemoveHeadMessageFromQueue,
+                onRemoveHeadMessageFromQueue = onRemoveHeadMessageFromQueue,
             )
             Column{
                 content()

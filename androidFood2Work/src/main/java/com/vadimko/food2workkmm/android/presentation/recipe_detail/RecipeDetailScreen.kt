@@ -14,6 +14,7 @@ import com.vadimko.food2workkmm.android.presentation.recipe_detail.components.Re
 import com.vadimko.food2workkmm.android.presentation.theme.AppTheme
 import com.vadimko.food2workkmm.presentation.recipe_detail.RecipeDetailEvents
 import com.vadimko.food2workkmm.presentation.recipe_detail.RecipeDetailState
+import com.vadimko.food2workkmm.presentation.recipe_list.RecipeListEvents
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -23,7 +24,10 @@ fun RecipeDetailScreen(
 ) {
     AppTheme(
         displayProgressBar = state.isLoading,
-        dialogQueue = state.queue
+        dialogQueue = state.queue,
+        onRemoveHeadMessageFromQueue = {
+            onTriggerEvent(RecipeDetailEvents.OnRemoveHeadMessageFromQueue)
+        }
     ) {
         if (state.recipe == null && state.isLoading) {
             LoadingRecipeShimmer(imageHeight = RECIPE_IMAGE_HEIGHT.dp)
